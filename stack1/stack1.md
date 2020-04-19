@@ -49,6 +49,7 @@ There is no `gets` call in this program. Instead, `strcpy` is used to copy the a
 
 ##### Disassembly:
 
+![disassembly](https://github.com/noobfromPitt/Protostar-writeups/blob/master/stack1/disassembly.PNG)
 
 We can see that 'modified' variable is at $esp+0x5c. Lets put breakpoints before and after `strcpy` and create hooks
 
@@ -69,11 +70,13 @@ r AAAAAAAA
 
 We can see that addresses 0xbffff75c and 0xbffff760 are overwritten with A's. Also, 'modified' is stored at 0xbffff79c and has value of 0x00000000
 
+![registers](https://github.com/noobfromPitt/Protostar-writeups/blob/master/stack1/registers.PNG)
 
 We need to overwrite from 0xbffff75c to 0xbffff79c. That is 40 + 4 words (68 bytes)
 Lets create a string of 68 bytes and make sure variable is overwritten
 ` r AAAAAAAABBBBBBBBCCCCCCCCDDDDDDDDEEEEEEEEFFFFFFFFGGGGGGGGHHHHHHHHIIII`
 
+![overwrite](https://github.com/noobfromPitt/Protostar-writeups/blob/master/stack1/overwrite.PNG)
 
 We can see that 0xbffff79c now has a value of 0x49494949 or IIII
 
@@ -81,9 +84,12 @@ Now we need to change I's in string to 0x61626364 (abcd)
 Lets run with this argument 
 `r AAAAAAAABBBBBBBBCCCCCCCCDDDDDDDDEEEEEEEEFFFFFFFFGGGGGGGGHHHHHHHHabcd`
 
+![try](https://github.com/noobfromPitt/Protostar-writeups/blob/master/stack1/try.PNG)
+
 Now we can see that 'modified' is changed to 0x64636261. This is because prostar is little endian (as mentioned in hints). Lets reverse abcd to dcba and try
 
 `r AAAAAAAABBBBBBBBCCCCCCCCDDDDDDDDEEEEEEEEFFFFFFFFGGGGGGGGHHHHHHHHdcba`
 
+![done](https://github.com/noobfromPitt/Protostar-writeups/blob/master/stack1/done.PNG)
 
 Now, the variable has 0x61626364 and the program has passed

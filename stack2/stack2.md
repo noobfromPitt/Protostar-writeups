@@ -1,4 +1,5 @@
 
+  
 ## Protostar exercises - [stack2](https://exploit-exercises.lains.space/protostar/stack2/)
 
 #### About
@@ -50,6 +51,8 @@ We need to create a GREENIE environment variable and overwrite 'modified' variab
 
 ###### Disassembly:
 
+![disassembly](https://github.com/noobfromPitt/Protostar-writeups/blob/master/stack2/disassemble.PNG)
+
 We can see that 'modified' is assigned an address $esp+0x58. Lets setup breakpoints before and after `strcpy()` to see which registers are changing
 
 Lets create GREENIE variable. `export GREENIE=AAAAAAAA`  and run the program.
@@ -63,7 +66,7 @@ define hook-stop
 >x/2i $eip
 >end
 ```
-
+![firstrun](https://github.com/noobfromPitt/Protostar-writeups/blob/master/stack2/firstrun.PNG)
 
 We can see that registers 0xbffff748 and 0xbffff74c are written with 0x41's.
 Also 'modified' is stored at 0xbffff788 ($esp+0x58) and has value of 0x00000000
@@ -72,11 +75,12 @@ To overwrite it, we need to fill the addresses from 0xbffff748 to 0xbffff788. Th
 
 Lets change the GREENIE value `export GREENIE=AAAAAAAABBBBBBBBCCCCCCCCDDDDDDDDEEEEEEEEFFFFFFFFGGGGGGGGHHHHHHHHIIII`
 
-
+![secondrun](https://github.com/noobfromPitt/Protostar-writeups/blob/master/stack2/second.PNG)
 
 Now, we can see that $esp+0x58 (0xbffff748) is changed to 0x49494949. Lets change it to the desired value 0x0d0a0d0a, which is '\r\n\r\n'
 
 Since the machine formats little endian, the required string is AAAAAAAABBBBBBBBCCCCCCCCDDDDDDDDEEEEEEEEFFFFFFFFGGGGGGGGHHHHHHH\n\r\n\r
 
+![done](https://github.com/noobfromPitt/Protostar-writeups/blob/master/stack2/done.PNG)
 
 Now, the varialbe is changed to the desired value and program executes without error.

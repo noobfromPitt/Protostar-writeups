@@ -39,6 +39,8 @@ We can solve this if we can change the 'modified' variable from 0
 
 ##### Disassembly:
 
+![disassembly](https://github.com/noobfromPitt/Protostar-writeups/blob/master/stack0/disassembly.PNG)
+
 Lets put breakpoints before and after `gets` call to see what registers are changed
 ```
 break *0x0804840c
@@ -56,14 +58,17 @@ From disassembly, we can see [esp+0x5c] will store the value of 'modified' varia
 
 Now lets run and give the input as 'AAAAAAAA' and see what registers are writter with 0x41's
 
+![AAAAA](https://github.com/noobfromPitt/Protostar-writeups/blob/master/stack0/AAAAA.PNG)
 
 Looks like the registers 0xbffff76c and 0xbffff780 are overwrittern
 We can check the 'modified' value using `x/x $esp+0x5c` which is 0x00000000, which is loacated at address 0xbffff7ac
 
 To overwrite this address, we need to write from 0xbffff76c to 0xbffff7ac + 0x8 (0xbffff7b0), that is 0x44 (or 68) characters - AAAAAAAABBBBBBBBCCCCCCCCDDDDDDDDEEEEEEEEFFFFFFFFGGGGGGGGHHHHHHHHIIII
 
+![done](https://github.com/noobfromPitt/Protostar-writeups/blob/master/stack0/done.PNG)
+
 Now, we can see the register esp+0x5c is overwritten with 0x49494949 (IIII) and the variable is changed.
 
 We can verify the input by running stack0 without gdb
 
-
+![verify](https://github.com/noobfromPitt/Protostar-writeups/blob/master/stack0/verify.PNG)

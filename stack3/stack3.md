@@ -50,6 +50,7 @@ So first we need to find 'win' address using objdump and write it to the address
 
 ##### Disassembly:
 
+![disassembly](https://github.com/noobfromPitt/Protostar-writeups/blob/master/stack3/disassemble.PNG)
 
 'fp' is stored at $esp+0x5c. It is moved into eax and called at 0x08048477. Out aim is to overwrite $esp value at this point. Lets put breapoint at this call.
 
@@ -63,7 +64,7 @@ Lets execute with input large enough to change $eax
 r
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 ```
-
+![registers](https://github.com/noobfromPitt/Protostar-writeups/blob/master/stack3/registers.PNG)
 
 We can see that $eax is changed to 0x41414141
 
@@ -77,6 +78,7 @@ Now, we need to find which part of input is being written to $eax and change it 
 
 So, lets run with input AAAABBBBCCCCDDDDEEEEFFFFIIIIJJJJKKKKLLLLMMMMNNNNOOOOPPPPQQQQRRRRSSSS and check the registers
 
+![registers-2](https://github.com/noobfromPitt/Protostar-writeups/blob/master/stack3/registers-2.PNG)
 
 $eax contains 0x53535353, which is 'SSSS'
 
@@ -96,11 +98,10 @@ info registers
 
 We see $eax is now 0x8048424. So, next instruction would be to execute $eax or win() and print success
 
+![done](https://github.com/noobfromPitt/Protostar-writeups/blob/master/stack3/done.PNG)
+
 We can also find the address of win() using
 ```
 user@protostar:/opt/protostar/bin$ objdump -x ./stack3 | grep win
 08048424 g     F .text  00000014              win
 ```
-
-
-
